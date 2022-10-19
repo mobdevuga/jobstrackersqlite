@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/menu_add"
+            android:icon="@drawable/ic_baseline_add_circle_outline_24"
+            android:orderInCategory="2"
+            android:title="Add job leads"
+            app:showAsAction="ifRoom|withText" />
+
+        <item
+            android:id="@+id/menu_review"
+            android:icon="@drawable/ic_baseline_view_list_24"
+            android:orderInCategory="2"
+            android:title="Review job leads"
+            app:showAsAction="ifRoom|withText" />
+
+        <item
+            android:id="@+id/menu_close"
+            android:icon="@drawable/ic_baseline_close_24"
+            android:orderInCategory="4"
+            android:title="Close app"
+            app:showAsAction="ifRoom|withText" />
+
+        <item
+            android:id="@+id/menu_help"
+            android:icon="@drawable/ic_baseline_help_24"
+            android:orderInCategory="5"
+            android:title="Get help"
+            app:showAsAction="never" />
+    </group>
+</menu>

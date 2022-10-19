@@ -1,0 +1,29 @@
+<resources>
+    <string name="app_name">JobsTrackerSQLite</string>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="help_fragment_text">
+        <![CDATA[
+            <h3>Jobs Tracker</h3> <p>This app can be used to manage your potential job leads.
+            Each job lead includes the <i>company name</i>, <i>telephone number</i>, its <i>website URL</i>, and your brief <i>comments</i> about the company.
+            Open the nav drawer to view the navigation menu.  You will be able to invoke the app\'s functions.
+            You will be able to access the following screens:<br/><br/>
+             <b>Add job leads</b><br/>
+             Here, you will be able to provide the information about the new job lead.  You will be able to
+             enter multiple job leads from this screen.<br/><br/>
+             <b>Review job leads</b><br/>
+             Here, you will be able to review all of your job leads.  You will be able to search for a specific job of interest.
+             Just tap on the magnifying glass icon on top of the screen and then enter a keyword.
+             Your job leads will be filtered based on the keyword and you
+             will see only job leads with the keyword in the company name or in the comments section.
+             While on this screen, you will also be able to add a new job lead, should you choose to do so.
+             Tap on the round Plus button at the bottom of the screen and enter a new Job Lead information into the dialog box.<br/><br/>
+             <b>Close app</b><br/>
+             The app will be closed.<br/><br/>
+             <b>Get help</b><br/>
+             Useful help information about the app will be displayed.<br/><br/>
+        ]]>
+    </string>
+</resources>
