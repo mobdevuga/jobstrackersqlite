@@ -19,8 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:backgroundTint="@color/purple_700"
         app:tint="@color/white"
-        app:srcCompat="@android:drawable/ic_input_add"
-        />
+        app:srcCompat="@android:drawable/ic_input_add" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"

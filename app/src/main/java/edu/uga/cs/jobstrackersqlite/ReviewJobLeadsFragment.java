@@ -49,32 +49,32 @@ public class ReviewJobLeadsFragment extends Fragment
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onCreate( Bundle savedInstanceState ) {
+        super.onCreate( savedInstanceState );
 
         // Enable the search menu population.
         // When the parameter of this method is true, Android will call onCreateOptionsMenu on
         // this fragment, when the options menu is being built for the hosting activity.
-        setHasOptionsMenu(true);
+        setHasOptionsMenu( true );
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView( LayoutInflater inflater, ViewGroup container,
+                              Bundle savedInstanceState ) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_review_job_leads, container, false);
+        return inflater.inflate( R.layout.fragment_review_job_leads, container, false );
     }
 
     @Override
     public void onViewCreated( View view, Bundle savedInstanceState ) {
-        super.onViewCreated(view,savedInstanceState);
+        super.onViewCreated( view, savedInstanceState );
 
         recyclerView = getView().findViewById( R.id.recyclerView );
-        FloatingActionButton floatingButton = getView().findViewById(R.id.floatingActionButton);
+        FloatingActionButton floatingButton = getView().findViewById( R.id.floatingActionButton );
 
         floatingButton.setOnClickListener( new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick( View v ) {
                 AddJobLeadDialogFragment newFragment = new AddJobLeadDialogFragment();
                 newFragment.setHostFragment( ReviewJobLeadsFragment.this );
                 newFragment.show( getParentFragmentManager(), null );
@@ -125,9 +125,7 @@ public class ReviewJobLeadsFragment extends Fragment
         // onPostExecute is like the notify method in an asynchronous method call discussed in class.
         @Override
         protected void onPostExecute( List<JobLead> jobsList ) {
-            //recyclerAdapter = new JobLeadRecyclerAdapter( jList );
-            //recyclerView.setAdapter( recyclerAdapter );
-            Log.d( TAG, "JobLeadDBReader: jList.size(): " + jobsList.size() );
+            Log.d( TAG, "JobLeadDBReader: jobsList.size(): " + jobsList.size() );
             jobLeadsList.addAll( jobsList );
 
             // create the RecyclerAdapter and set it for the RecyclerView
@@ -156,21 +154,26 @@ public class ReviewJobLeadsFragment extends Fragment
         protected void onPostExecute( JobLead jobLead ) {
             // Update the recycler view to include the new job lead
             jobLeadsList.add( jobLead );
-            //reset the originalValues in the recyler adapter to the new list (JoLeadsList)
+
+            // Sync the originalValues list in the recyler adapter to the new updated list (JoLeadsList)
             recyclerAdapter.sync();
-            // notify the adapter that an item has been inserted
-            recyclerAdapter.notifyItemInserted(jobLeadsList.size() - 1);
-            // reposition the view to show to newly added item
-            recyclerView.getLayoutManager().scrollToPosition( jobLeadsList.size() - 1 );
+
+            // Notify the adapter that an item has been inserted
+            recyclerAdapter.notifyItemInserted(jobLeadsList.size() - 1 );
+
+            // Reposition the view to show to newly added item by smoothly scrolling to it
+            recyclerView.smoothScrollToPosition( jobLeadsList.size() - 1 );
 
             Log.d( TAG, "Job lead saved: " + jobLead );
         }
     }
 
-    // this is a callback for the AddJobLeadDialogFragment which saves a new job lead
-    // this method is called from the AddJobLeadDialogFragment on the "OK" button tap.
+    // This is an implementation of a callback for the AddJobLeadDialogFragment, which saves
+    // a new job lead.
+    // This method is called from the AddJobLeadDialogFragment in a listener to the "OK" button.
     @Override
-    public void saveNewJobLead(JobLead jobLead) {
+    public void saveNewJobLead( JobLead jobLead ) {
+
         // add the new job lead
         new JobLeadDBWriter().execute( jobLead );
 
@@ -190,50 +193,67 @@ public class ReviewJobLeadsFragment extends Fragment
     }
 
     @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search_menu, menu);
-        MenuItem mSearch = menu.findItem(R.id.appSearchBar);
-        SearchView mSearchView = (SearchView) mSearch.getActionView();
-        mSearchView.setQueryHint("Search words");
-        EditText searchEditText = (EditText) mSearchView.findViewById(androidx.appcompat.R.id.search_src_text );
+    public void onCreateOptionsMenu( Menu menu, MenuInflater inflater ) {
+        // inflate the menu
+        inflater.inflate( R.menu.search_menu, menu );
+
+        // Get the search view
+        MenuItem searchMenu = menu.findItem( R.id.appSearchBar );
+        SearchView searchView = (SearchView) searchMenu.getActionView();
+
+        // Provide a search hint
+        searchView.setQueryHint("Search words");
+
+        // Chenage the background, text, and hint text colors in the search box
+        EditText searchEditText = (EditText) searchView.findViewById(androidx.appcompat.R.id.search_src_text );
         searchEditText.setBackgroundColor( getResources().getColor( R.color.white ) );
         searchEditText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
         searchEditText.setHintTextColor(getResources().getColor(R.color.colorPrimary));
-        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+        // Set the listener for the search box
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d( TAG, "Query submitted" );
                 return false;
             }
+
+            // This method will implement an incremental search for the search words
+            // It is called every time there is a change in the text in the search box.
             @Override
             public boolean onQueryTextChange(String newText) {
                 recyclerAdapter.getFilter().filter(newText);
                 return true;
             }
         });
+
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public void onResume() {
-        Log.d( TAG, "ReviewJobLeadsFragment.onResume()" );
         super.onResume();
-        Log.d( TAG, "ReviewJobLeadsFragment.onPause(): opening DB" );
-        // open the database in onResume
-        if( jobLeadsData != null && !jobLeadsData.isDBOpen() )
+
+        // Open the database
+        if( jobLeadsData != null && !jobLeadsData.isDBOpen() ) {
             jobLeadsData.open();
+            Log.d( TAG, "ReviewJobLeadsFragment.onResume(): opening DB" );
+        }
+
+        // Update the app name in the Action Bar to be the same as the app's name
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle( getResources().getString( R.string.app_name ) );
     }
 
     // We need to save job leads into a file as the activity stops being a foreground activity
     @Override
     public void onPause() {
-        Log.d( TAG, "ReviewJobLeadsFragment.onPause()" );
         super.onPause();
 
-        Log.d( TAG, "ReviewJobLeadsFragment.onPause(): closing DB" );
         // close the database in onPause
-        if( jobLeadsData != null )
+        if( jobLeadsData != null ) {
             jobLeadsData.close();
+            Log.d( TAG, "ReviewJobLeadsFragment.onPause(): closing DB" );
+        }
     }
 }

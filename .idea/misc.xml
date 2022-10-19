@@ -6,6 +6,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.20555555555555555" />
         <entry key="app/src/main/res/layout/fragment_main_screen.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_review_job_leads.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/jobleads_menu.xml" value="0.20555555555555555" />
       </map>
     </option>
   </component>

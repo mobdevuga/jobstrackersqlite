@@ -49,13 +49,13 @@ public class JobLeadRecyclerAdapter
         TextView url;
         TextView comments;
 
-        public JobLeadHolder(View itemView ) {
-            super(itemView);
+        public JobLeadHolder( View itemView ) {
+            super( itemView );
 
-            companyName = (TextView) itemView.findViewById( R.id.companyName );
-            phone = (TextView) itemView.findViewById( R.id.phone );
-            url = (TextView) itemView.findViewById( R.id.url );
-            comments = (TextView) itemView.findViewById( R.id.comments );
+            companyName = itemView.findViewById( R.id.companyName );
+            phone = itemView.findViewById( R.id.phone );
+            url = itemView.findViewById( R.id.url );
+            comments = itemView.findViewById( R.id.comments );
         }
     }
 
@@ -109,19 +109,21 @@ public class JobLeadRecyclerAdapter
                     String searchStr = constraint.toString().toLowerCase();
 
                     for( JobLead jobLead : list ) {
-                        if( jobLead.getCompanyName().toLowerCase().contains(searchStr)
-                                || jobLead.getComments().toLowerCase().contains(searchStr) ) {
+                        // check if either the company name or the comments contain the search string
+                        if( jobLead.getCompanyName().toLowerCase().contains( searchStr )
+                                || jobLead.getComments().toLowerCase().contains( searchStr ) ) {
                             resultsModel.add( jobLead );
                         }
 /*
+                        // this may be a faster approach with a long list of items to search
                         if (jobLead.getCompanyName().regionMatches(true, i, searchStr, 0, length))
                             return true;
 
  */
-
-                        filterResults.count = resultsModel.size();
-                        filterResults.values = resultsModel;
                     }
+
+                    filterResults.count = resultsModel.size();
+                    filterResults.values = resultsModel;
                 }
 
                 return filterResults;
@@ -131,7 +133,7 @@ public class JobLeadRecyclerAdapter
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 values = (ArrayList<JobLead>) results.values;
                 notifyDataSetChanged();
-                if(values.size() == 0) {
+                if( values.size() == 0 ) {
                     Toast.makeText( context, "Not Found", Toast.LENGTH_LONG).show();
                 }
             }

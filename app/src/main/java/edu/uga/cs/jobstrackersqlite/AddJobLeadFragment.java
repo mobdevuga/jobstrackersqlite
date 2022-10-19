@@ -15,11 +15,7 @@ import android.widget.Toast;
 
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link AddJobLeadFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class AddJobLeadFragment extends Fragment {
 
     private static final String TAG = "AddJobLeadFragment";
@@ -37,23 +33,21 @@ public class AddJobLeadFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static AddJobLeadFragment newInstance() {
         AddJobLeadFragment fragment = new AddJobLeadFragment();
         return fragment;
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView( LayoutInflater inflater, ViewGroup container,
+                              Bundle savedInstanceState ) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_add_job_lead, container, false);
     }
 
     @Override
     public void onViewCreated( View view, Bundle savedInstanceState ) {
-        //Log.d( TAG, "onViewCreated()" );
-        super.onViewCreated(view,savedInstanceState);
+        super.onViewCreated( view, savedInstanceState );
 
         companyNameView = getView().findViewById( R.id.editText1 );
         phoneView = getView().findViewById( R.id.editText2 );
@@ -101,11 +95,12 @@ public class AddJobLeadFragment extends Fragment {
 
     private class SaveButtonClickListener implements View.OnClickListener {
         @Override
-        public void onClick(View v) {
+        public void onClick( View v ) {
             String companyName = companyNameView.getText().toString();
             String phone = phoneView.getText().toString();
             String url = urlView.getText().toString();
             String comments = commentsView.getText().toString();
+
             JobLead jobLead = new JobLead( companyName, phone, url, comments );
 
             // Store this new job lead in the database asynchronously,
@@ -116,7 +111,6 @@ public class AddJobLeadFragment extends Fragment {
 
     @Override
     public void onResume() {
-        //Log.d( TAG, "Flow1_A.onResume()"  );
         super.onResume();
         // open the database in onResume
         if( jobLeadsData != null )
