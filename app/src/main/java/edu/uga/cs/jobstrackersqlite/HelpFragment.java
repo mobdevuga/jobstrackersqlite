@@ -2,17 +2,14 @@ package edu.uga.cs.jobstrackersqlite;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.core.text.HtmlCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 
 public class HelpFragment extends Fragment {
@@ -39,11 +36,11 @@ public class HelpFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated( View view, Bundle savedInstanceState ) {
+    public void onViewCreated( @NonNull View view, Bundle savedInstanceState ) {
         super.onViewCreated(view,savedInstanceState);
 
         TextView textView = getView().findViewById( R.id.textView3 );
         String text = getResources().getString( R.string.help_fragment_text );
-        textView.setText( HtmlCompat.fromHtml(text, HtmlCompat.FROM_HTML_MODE_LEGACY) );
+        textView.setText( HtmlCompat.fromHtml( text, HtmlCompat.FROM_HTML_MODE_LEGACY ) );
     }
 }

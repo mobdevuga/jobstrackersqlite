@@ -2,6 +2,7 @@ package edu.uga.cs.jobstrackersqlite;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -13,7 +14,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.List;
 
 
 public class AddJobLeadFragment extends Fragment {
@@ -27,7 +27,6 @@ public class AddJobLeadFragment extends Fragment {
     private Button   saveButton;
 
     private JobLeadsData jobLeadsData = null;
-    private List<JobLead> jobLeadsList;
 
     public AddJobLeadFragment() {
         // Required empty public constructor
@@ -46,7 +45,7 @@ public class AddJobLeadFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated( View view, Bundle savedInstanceState ) {
+    public void onViewCreated( @NonNull View view, Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
 
         companyNameView = getView().findViewById( R.id.editText1 );

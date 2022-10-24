@@ -1,5 +1,6 @@
 package edu.uga.cs.jobstrackersqlite;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
@@ -42,7 +43,7 @@ public class JobLeadRecyclerAdapter
     }
 
     // The adapter must have a ViewHolder class to "hold" one item to show.
-    class JobLeadHolder extends RecyclerView.ViewHolder {
+    public static class JobLeadHolder extends RecyclerView.ViewHolder {
 
         TextView companyName;
         TextView phone;
@@ -59,6 +60,7 @@ public class JobLeadRecyclerAdapter
         }
     }
 
+    @NonNull
     @Override
     public JobLeadHolder onCreateViewHolder( ViewGroup parent, int viewType ) {
         // We need to make sure that all CardViews have the same, full width, allowed by the parent view.
@@ -116,7 +118,7 @@ public class JobLeadRecyclerAdapter
                         }
 /*
                         // this may be a faster approach with a long list of items to search
-                        if (jobLead.getCompanyName().regionMatches(true, i, searchStr, 0, length))
+                        if( jobLead.getCompanyName().regionMatches( true, i, searchStr, 0, length ) )
                             return true;
 
  */

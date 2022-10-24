@@ -2,11 +2,10 @@ package edu.uga.cs.jobstrackersqlite;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,10 +16,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
-import android.widget.Toast;
+
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -66,19 +63,16 @@ public class ReviewJobLeadsFragment extends Fragment
     }
 
     @Override
-    public void onViewCreated( View view, Bundle savedInstanceState ) {
+    public void onViewCreated( @NonNull View view, Bundle savedInstanceState ) {
         super.onViewCreated( view, savedInstanceState );
 
         recyclerView = getView().findViewById( R.id.recyclerView );
         FloatingActionButton floatingButton = getView().findViewById( R.id.floatingActionButton );
 
-        floatingButton.setOnClickListener( new View.OnClickListener() {
-            @Override
-            public void onClick( View v ) {
-                AddJobLeadDialogFragment newFragment = new AddJobLeadDialogFragment();
-                newFragment.setHostFragment( ReviewJobLeadsFragment.this );
-                newFragment.show( getParentFragmentManager(), null );
-            }
+        floatingButton.setOnClickListener(v -> {
+            AddJobLeadDialogFragment newFragment = new AddJobLeadDialogFragment();
+            newFragment.setHostFragment( ReviewJobLeadsFragment.this );
+            newFragment.show( getParentFragmentManager(), null );
         });
 
         // use a linear layout manager for the recycler view
@@ -193,7 +187,7 @@ public class ReviewJobLeadsFragment extends Fragment
     }
 
     @Override
-    public void onCreateOptionsMenu( Menu menu, MenuInflater inflater ) {
+    public void onCreateOptionsMenu( @NonNull Menu menu, MenuInflater inflater ) {
         // inflate the menu
         inflater.inflate( R.menu.search_menu, menu );
 
@@ -202,19 +196,19 @@ public class ReviewJobLeadsFragment extends Fragment
         SearchView searchView = (SearchView) searchMenu.getActionView();
 
         // Provide a search hint
-        searchView.setQueryHint("Search words");
+        searchView.setQueryHint( "Search words" );
 
-        // Chenage the background, text, and hint text colors in the search box
-        EditText searchEditText = (EditText) searchView.findViewById(androidx.appcompat.R.id.search_src_text );
+        // Chanage the background, text, and hint text colors in the search box
+        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text );
         searchEditText.setBackgroundColor( getResources().getColor( R.color.white ) );
-        searchEditText.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
-        searchEditText.setHintTextColor(getResources().getColor(R.color.colorPrimary));
+        searchEditText.setTextColor( getResources().getColor( R.color.colorPrimaryDark ) );
+        searchEditText.setHintTextColor( getResources().getColor( R.color.colorPrimary ) );
 
         // Set the listener for the search box
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit( String query ) {
                 Log.d( TAG, "Query submitted" );
                 return false;
             }
@@ -222,8 +216,8 @@ public class ReviewJobLeadsFragment extends Fragment
             // This method will implement an incremental search for the search words
             // It is called every time there is a change in the text in the search box.
             @Override
-            public boolean onQueryTextChange(String newText) {
-                recyclerAdapter.getFilter().filter(newText);
+            public boolean onQueryTextChange( String newText ) {
+                recyclerAdapter.getFilter().filter( newText );
                 return true;
             }
         });

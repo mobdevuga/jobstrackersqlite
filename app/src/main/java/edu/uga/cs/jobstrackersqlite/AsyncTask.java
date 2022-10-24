@@ -36,38 +36,35 @@ public abstract class AsyncTask<Param,Result> {
         // main UI thread.  The main UI thread will update the UI accordingly.
         // Since the Runnable below will execute in a different thread, the main UI thread
         // will not be blocked.
-        executor.execute( new Runnable() {
-            @Override
-            public void run() {
+        executor.execute( () -> {
 
-                // Run the method body (doInBackground)
-                Result result = doInBackground( params );
+            // Run the method body (doInBackground)
+            Result result = doInBackground( params );
 
-                // Now, pass the result to the main UI thread
-                //
-                // Get the looper of the UI thread (the main UI event dispatcher's loop)
-                // A Looper is simply a message queue within the Android OS.
-                // If you are curious, you can examine the source code of the Looper class here:
-                // https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/os/Looper.java
-                Looper looper = Looper.getMainLooper();
+            // Now, pass the result to the main UI thread
+            //
+            // Get the looper of the UI thread (the main UI event dispatcher's loop)
+            // A Looper is simply a message queue within the Android OS.
+            // If you are curious, you can examine the source code of the Looper class here:
+            // https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/os/Looper.java
+            Looper looper = Looper.getMainLooper();
 
-                // Create a Handler using the main UI's looper.
-                // A Handler is used to interact with a Looper, for example,
-                // for posting messages on the main Looper's queue.
-                // If you are curious, you can examine the source code of the Handler class here:
-                // https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/os/Handler.java
-                Handler handler = new Handler( looper );
+            // Create a Handler using the main UI's looper.
+            // A Handler is used to interact with a Looper, for example,
+            // for posting messages on the main Looper's queue.
+            // If you are curious, you can examine the source code of the Handler class here:
+            // https://android.googlesource.com/platform/frameworks/base/+/master/core/java/android/os/Handler.java
+            Handler handler = new Handler( looper );
 
-                // Post the processing of the result of the doInBackground method
-                // on the main UI thread's looper.
-                handler.post( new Runnable() {
-                    @Override
-                    public void run() {
-                        // handle the method result in the main UI threa
-                        onPostExecute( result );
-                    }
-                });
-            }
+            // Post the processing of the result of the doInBackground method
+            // on the main UI thread's looper.
+            handler.post( new Runnable() {
+                @Override
+                public void run() {
+                    // handle the method result in the main UI threa
+                    onPostExecute( result );
+                }
+            });
         });
     }
 

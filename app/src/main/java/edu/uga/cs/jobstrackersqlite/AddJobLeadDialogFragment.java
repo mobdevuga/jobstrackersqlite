@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.DialogFragment;
 
@@ -25,27 +26,25 @@ public class AddJobLeadDialogFragment extends DialogFragment {
         void saveNewJobLead( JobLead jobLead );
     }
 
+    @NonNull
     @Override
     public Dialog onCreateDialog( Bundle savedInstanceState ) {
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        final View layout = inflater.inflate(R.layout.add_job_lead_dialog,
-                                             (ViewGroup) getActivity().findViewById(R.id.root));
+        final View layout = inflater.inflate( R.layout.add_job_lead_dialog,
+                                              getActivity().findViewById( R.id.root ) );
         companyNameView = layout.findViewById( R.id.editText1 );
         phoneView = layout.findViewById( R.id.editText2 );
         urlView = layout.findViewById( R.id.editText3 );
         commentsView = layout.findViewById( R.id.editText4 );
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder( getActivity() );
         builder.setView( layout );
 
         // Set the title of the AlertDialog
         builder.setTitle( "New Job Lead" );
-        builder.setNegativeButton( android.R.string.cancel, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick( DialogInterface dialog, int whichButton ) {
-                // close the dialog
-                dialog.dismiss();
-            }
+        builder.setNegativeButton( android.R.string.cancel, ( dialog, whichButton ) -> {
+            // close the dialog
+            dialog.dismiss();
         });
         builder.setPositiveButton( android.R.string.ok, new ButtonClickListener() );
 

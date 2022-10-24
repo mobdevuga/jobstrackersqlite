@@ -1,5 +1,6 @@
 package edu.uga.cs.jobstrackersqlite;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -18,7 +19,6 @@ import com.google.android.material.navigation.NavigationView;
  */
 public class MainActivity extends AppCompatActivity {
 
-    public static final String MESSAGE_TYPE = "edu.uga.cs.jobstracker.JOBLEADS_DATA";
     public static final String TAG = "MainActivity";
 
     private DrawerLayout drawerLayout;
@@ -33,36 +33,27 @@ public class MainActivity extends AppCompatActivity {
         setContentView( R.layout.activity_main );
 
         // assigning ID of the toolbar to a variable
-        toolbar = (Toolbar) findViewById( R.id.toolbar );
+        toolbar = findViewById( R.id.toolbar );
 
         // using toolbar as ActionBar
         setSupportActionBar( toolbar );
-
-        /*
-        // This will display an Up icon (<-), we will replace it with hamburger later
-        getSupportActionBar().setDisplayHomeAsUpEnabled( true );
-        */
 
         // Find our drawer view
         drawerLayout = (DrawerLayout) findViewById( R.id.drawer_layout );
         drawerToggle = setupDrawerToggle();
 
-        // Setup toggle to display hamburger icon with nice animation
         drawerToggle.setDrawerIndicatorEnabled( true );
         drawerToggle.syncState();
 
-        // Tie DrawerLayout events to the ActionBarToggle
+        // Connect DrawerLayout events to the ActionBarToggle
         drawerLayout.addDrawerListener( drawerToggle );
 
         // Find the drawer view
-        navigationView = (NavigationView) findViewById( R.id.nvView );
+        navigationView = findViewById( R.id.nvView );
         navigationView.setNavigationItemSelectedListener(
-                new NavigationView.OnNavigationItemSelectedListener() {
-                    @Override
-                    public boolean onNavigationItemSelected( MenuItem menuItem ) {
-                        selectDrawerItem( menuItem );
-                        return true;
-                    }
+                menuItem -> {
+                    selectDrawerItem( menuItem );
+                    return true;
                 });
     }
 
@@ -118,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onConfigurationChanged( Configuration newConfig ) {
+    public void onConfigurationChanged( @NonNull Configuration newConfig ) {
         super.onConfigurationChanged( newConfig );
         // Pass any configuration change to the drawer toggles
         drawerToggle.onConfigurationChanged( newConfig );
