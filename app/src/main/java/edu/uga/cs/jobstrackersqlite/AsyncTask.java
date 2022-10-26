@@ -29,7 +29,8 @@ public abstract class AsyncTask<Param,Result> {
         // a thread.  The run() method is called automatically when a Thread is given
         // a Runnable object.
         //
-        // The anonymous Runnable class below will execute the method body (doInBackground)
+        // The lambda expression below effectively creates an anonymous
+        // Runnable class that will execute the method's body (doInBackground)
         // in the executor service, which uses a different thread than the main UI thread.
         // Once the result is obtained, the Runnable class will add another Runnable
         // with the call to onPostExecute with the Result argument to be added to the
@@ -61,7 +62,7 @@ public abstract class AsyncTask<Param,Result> {
             handler.post( new Runnable() {
                 @Override
                 public void run() {
-                    // handle the method result in the main UI threa
+                    // handle the method result in the main UI thread
                     onPostExecute( result );
                 }
             });
