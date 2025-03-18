@@ -29,7 +29,8 @@ public class JobLeadsData {
     };
 
     public JobLeadsData( Context context ) {
-        this.jobLeadsDbHelper = JobLeadsDBHelper.getInstance( context );
+        //jobLeadsDbHelper = JobLeadsDBHelper.getInstance( context );
+        jobLeadsDbHelper = JobLeadsDBHelper.getInstance( context );
     }
 
     // Open the database

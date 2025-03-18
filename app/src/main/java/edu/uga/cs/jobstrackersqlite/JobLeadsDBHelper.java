@@ -55,7 +55,7 @@ public class JobLeadsDBHelper extends SQLiteOpenHelper {
 
     // Access method to the single instance of the class.
     // It is synchronized, so that only one thread can executes this method, at a time.
-    public static synchronized JobLeadsDBHelper getInstance( Context context ) {
+    public synchronized static JobLeadsDBHelper getInstance( Context context ) {
         // check if the instance already exists and if not, create the instance
         if( helperInstance == null ) {
             helperInstance = new JobLeadsDBHelper( context.getApplicationContext() );
