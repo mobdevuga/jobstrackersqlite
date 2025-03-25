@@ -18,8 +18,8 @@ public abstract class AsyncTask<Param, Result> {
     // An internal method to execute something in background
     private void executeInBackground( Param... params ) {
 
-        // Get en executor service -- it will run the task
-        // in the background, i.e., in this executor.  This executor service
+        // Get en executor service -- it will run the task in
+        // the background, i.e., in this executor.  This executor service
         // has its own thread, which is different than the main UI thread.
         // As a result, anything running on this thread will not block the UI.
         ExecutorService executor = Executors.newSingleThreadExecutor();
