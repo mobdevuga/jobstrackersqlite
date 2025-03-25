@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.menu_close:
                 finish();
-                break;
+                return;
             default:
                 return;
         }
