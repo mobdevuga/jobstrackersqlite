@@ -5,7 +5,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,23 +38,17 @@ public class ReviewJobLeadsFragment extends Fragment
     private RecyclerView recyclerView;
     private JobLeadRecyclerAdapter recyclerAdapter;
 
+    private SearchFragmentMenuProvider searchFragmentMenuProvider;
+
+    // Required default constructor
     public ReviewJobLeadsFragment() {
         // Required empty public constructor
     }
 
+    // And our newInstance static method
     public static ReviewJobLeadsFragment newInstance() {
         ReviewJobLeadsFragment fragment = new ReviewJobLeadsFragment();
         return fragment;
-    }
-
-    @Override
-    public void onCreate( Bundle savedInstanceState ) {
-        super.onCreate( savedInstanceState );
-
-        // Enable the search menu population.
-        // When the parameter of this method is true, Android will call onCreateOptionsMenu on
-        // this fragment, when the options menu is being built for the hosting activity.
-        setHasOptionsMenu( true );
     }
 
     @Override
@@ -96,6 +92,9 @@ public class ReviewJobLeadsFragment extends Fragment
         // without blocking the main UI thread.
         new JobLeadDBReader().execute();
 
+        // Prepare the MenuProvider for the search capability
+        searchFragmentMenuProvider = new SearchFragmentMenuProvider();
+        requireActivity().addMenuProvider( searchFragmentMenuProvider, getViewLifecycleOwner(), Lifecycle.State.RESUMED );
     }
 
     // This is an AsyncTask class (it extends AsyncTask) to perform DB reading of job leads, asynchronously.
@@ -125,6 +124,10 @@ public class ReviewJobLeadsFragment extends Fragment
             // create the RecyclerAdapter and set it for the RecyclerView
             recyclerAdapter = new JobLeadRecyclerAdapter( getActivity(), jobLeadsList );
             recyclerView.setAdapter( recyclerAdapter );
+
+            // Once we have the RecyclerAdapter, provide it to our MenuProvider
+            // We will be filtering JobLeads on the RecyclerAdapter while searching in it.
+            searchFragmentMenuProvider.setRecyclerAdapter( recyclerAdapter );
         }
     }
 
@@ -164,7 +167,7 @@ public class ReviewJobLeadsFragment extends Fragment
 
     // This is an implementation of a callback for the AddJobLeadDialogFragment, which saves
     // a new job lead.
-    // This method is called from the AddJobLeadDialogFragment in a listener to the "OK" button.
+    // This method is called from the AddJobLeadDialogFragment in a listener for the "OK" button.
     @Override
     public void saveNewJobLead( JobLead jobLead ) {
 
@@ -186,43 +189,66 @@ public class ReviewJobLeadsFragment extends Fragment
         } );
     }
 
-    @Override
-    public void onCreateOptionsMenu( @NonNull Menu menu, MenuInflater inflater ) {
-        // inflate the menu
-        inflater.inflate( R.menu.search_menu, menu );
+    // This is the new method for adding a menu; we are adding a search item to the toolbar.
+    // You may find online examples with the onCreateOptionsMenu callback,
+    // but this callback has been deprecated. Hence, we are using a MenuProvider now.
+    private class SearchFragmentMenuProvider implements MenuProvider {
 
-        // Get the search view
-        MenuItem searchMenu = menu.findItem( R.id.appSearchBar );
-        SearchView searchView = (SearchView) searchMenu.getActionView();
+        // We will be filtering items on this RecyclerAdapter
+        private JobLeadRecyclerAdapter recyclerAdapter;
 
-        // Provide a search hint
-        searchView.setQueryHint( "Search words" );
+        @Override
+        public void onCreateMenu( @NonNull Menu menu, @NonNull MenuInflater menuInflater ) {
 
-        // Chanage the background, text, and hint text colors in the search box
-        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text );
-        searchEditText.setBackgroundColor( getResources().getColor( R.color.white ) );
-        searchEditText.setTextColor( getResources().getColor( R.color.colorPrimaryDark ) );
-        searchEditText.setHintTextColor( getResources().getColor( R.color.colorPrimary ) );
+            //inflate the menu with the search box
+            menuInflater.inflate( R.menu.search_menu, menu ); // Inflate your menu XML
 
-        // Set the listener for the search box
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            // Get the search menu item and then the SearchView
+            MenuItem searchMenu = menu.findItem( R.id.appSearchBar );
+            SearchView searchView = (SearchView) searchMenu.getActionView();
 
-            @Override
-            public boolean onQueryTextSubmit( String query ) {
-                Log.d( TAG, "Query submitted" );
-                return false;
-            }
+            // Provide a search hint
+            searchView.setQueryHint( "Search terms" );
 
-            // This method will implement an incremental search for the search words
-            // It is called every time there is a change in the text in the search box.
-            @Override
-            public boolean onQueryTextChange( String newText ) {
-                recyclerAdapter.getFilter().filter( newText );
-                return true;
-            }
-        });
+            // Get the EditText we will use for searching
+            EditText searchEditText = searchView.findViewById( androidx.appcompat.R.id.search_src_text );
 
-        super.onCreateOptionsMenu(menu, inflater);
+            // Chanage the colors for the background, text, and hint text in the search box
+            searchEditText.setBackgroundColor( getResources().getColor( R.color.white ) );
+            searchEditText.setTextColor( getResources().getColor( R.color.colorPrimaryDark ) );
+            searchEditText.setHintTextColor( getResources().getColor( R.color.colorPrimary ) );
+
+            // Set the listener associated with the search box
+            searchView.setOnQueryTextListener( new SearchView.OnQueryTextListener() {
+
+                @Override
+                public boolean onQueryTextSubmit( String query ) {
+                    Log.d(TAG, "Query submitted");
+                    return false;
+                }
+
+                // This method will implement an incremental search for the search words.
+                // It is called every time there is a change in the search terms in the search box.
+                @Override
+                public boolean onQueryTextChange( String newText ) {
+                    recyclerAdapter.getFilter().filter( newText );
+                    return true;
+                }
+            });
+        }
+
+        // This callback will not be used, but must be there, as required by MenuProvider
+        @Override
+        public boolean onMenuItemSelected( @NonNull MenuItem searchMenu ) {
+            // Nothing to do here...
+            return false;
+        }
+
+        // Set the Recycler adapter for the search;
+        // we will be filtering the items here based on search terms.
+        public void setRecyclerAdapter(JobLeadRecyclerAdapter recyclerAdapter ) {
+            this.recyclerAdapter = recyclerAdapter;
+        }
     }
 
     @Override
